@@ -10,13 +10,14 @@ def insert_location_data(cursor, locations):
         cursor.execute("INSERT INTO locations VALUES (?, ?, ?, ?, ?)", 
                        (location.name, location.longitude, location.latitude, location.region, location.country))
 
-def load_locations_from_csv(filename):
+def load_locations_from_csv(filename='data/locations.csv'):
     locations = []
     with open(filename, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             locations.append((row['name'], float(row['longitude']), float(row['latitude']), row['region'], row['country']))
     return locations
+
 
 def main():
     conn = sqlite3.connect('climate.db')
