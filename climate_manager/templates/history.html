@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather History</title>
+</head>
+<body>
+    <h1>Weather History for {{ location.name }}</h1>
+    {% for history in location.history %}
+    <div>
+        <p>Date: {{ history.date }}</p>
+        <p>Weather: {{ history.weather_description }}</p>
+        <p>Temperature: {{ history.temperature }}°C</p>
+    </div>
+    {% endfor %}
+</body>
+</html>
