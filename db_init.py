@@ -1,32 +1,26 @@
 import sqlite3
 import csv
 
-def create_tables(cursor):
-    cursor.execute('''CREATE TABLE locations (name TEXT, longitude REAL, latitude REAL, region TEXT, country TEXT)''')
-    cursor.execute('''CREATE TABLE history (location_name TEXT, date TEXT, weather_description TEXT, temperature INTEGER)''')
+def create_table(cursor):
+    cursor.execute('''CREATE TABLE climate_data (date TEXT, temperature FLOAT, co2_levels FLOAT)''')
 
-def insert_location_data(cursor, locations):
-    for location in locations:
-        cursor.execute("INSERT INTO locations VALUES (?, ?, ?, ?, ?)", 
-                       (location.name, location.longitude, location.latitude, location.region, location.country))
+def insert_data(cursor, data):
+    cursor.executemany("INSERT INTO climate_data VALUES (?, ?, ?)", data)
 
-def load_locations_from_csv(filename='data/locations.csv'):
-    locations = []
+def load_data_from_csv(filename):
     with open(filename, newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            locations.append((row['name'], float(row['longitude']), float(row['latitude']), row['region'], row['country']))
-    return locations
-
+        reader = csv.reader(csvfile)
+        next(reader)  # Skip the header row
+        return list(reader)
 
 def main():
-    conn = sqlite3.connect('climate.db')
-    cursor = conn.cursor()
-    create_tables(cursor)
-    locations = load_locations_from_csv('locations.csv')
-    insert_location_data(cursor, locations)
-    conn.commit()
-    conn.close()
+    connection = sqlite3.connect('data.db')
+    cursor = connection.cursor()
+    create_table(cursor)
+    data = load_data_from_csv('data.csv')
+    insert_data(cursor, data)
+    connection.commit()
+    connection.close()
 
 if __name__ == "__main__":
     main()
