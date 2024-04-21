@@ -1,0 +1,22 @@
+<!-- impact.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>CO2 Levels Impact</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>CO2 Levels (ppm)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in data %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
